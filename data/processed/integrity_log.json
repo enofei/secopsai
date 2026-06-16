@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-06-16T04:01:44.747205",
+  "file": "data/raw/tuesday.csv",
+  "sha256_hash": "0154df9c8bda6b0d64bf5bf40ae3cc9ccc6c004804455655a74bed765eea218e",
+  "row_count": 9000,
+  "label_distribution": {
+    "BENIGN": 5000,
+    "DNS-Tunnelling": 1000,
+    "Slow-Exfiltration": 1000,
+    "C2-Beaconing": 1000,
+    "Lateral-Movement": 1000
+  }
+}
