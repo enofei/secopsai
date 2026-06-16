@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-06-16T04:01:44.747205",
+  "timestamp": "2026-06-16T04:45:05.992482",
   "file": "data/raw/tuesday.csv",
-  "sha256_hash": "0154df9c8bda6b0d64bf5bf40ae3cc9ccc6c004804455655a74bed765eea218e",
+  "sha256_hash": "acc0d5c21884b29feb71ab78c0436b5cf50a2a120a0c796c94d1bb7fa6de66c6",
   "row_count": 9000,
   "label_distribution": {
     "BENIGN": 5000,

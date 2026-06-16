@@ -1,0 +1,66 @@
+{
+  "model": "xgboost_classifier",
+  "f1_score": 0.9931,
+  "precision": 0.9975,
+  "recall": 0.9888,
+  "confusion_matrix": [
+    [
+      998,
+      2
+    ],
+    [
+      9,
+      791
+    ]
+  ],
+  "feature_importance": {
+    "Flow Bytes/s": 0.42058610916137695,
+    "Total Backward Packets": 0.20590552687644958,
+    "ACK Flag Count": 0.10629874467849731,
+    "Packet Length Variance": 0.07016267627477646,
+    "Average Packet Size": 0.03339844197034836,
+    "Packet Length Mean": 0.031647246330976486,
+    "Bwd IAT Mean": 0.02376922406256199,
+    "Packet Length Std": 0.020658008754253387,
+    "Fwd IAT Mean": 0.016048351302742958,
+    "PSH Flag Count": 0.014847890473902225,
+    "Flow IAT Std": 0.00942444708198309,
+    "Total Fwd Packets": 0.008241761475801468,
+    "Flow Packets/s": 0.007389779202640057,
+    "Flow IAT Mean": 0.00524127995595336,
+    "SYN Flag Count": 0.004687221255153418,
+    "byte_ratio": 0.00371358310803771,
+    "FIN Flag Count": 0.003557416144758463,
+    "connection_symmetry": 0.003469733288511634,
+    "size_consistency": 0.003076005494222045,
+    "flow_speed": 0.0029439334757626057,
+    "Flow Duration": 0.0025527551770210266,
+    "timing_entropy": 0.002379780635237694
+  },
+  "baseline_f1": 0.747,
+  "improvement_pct": 32.95,
+  "ablation_study": {
+    "Flow Bytes/s": 0.0037,
+    "Packet Length Mean": 0.0025,
+    "PSH Flag Count": 0.0025,
+    "Packet Length Std": 0.0019,
+    "Flow Packets/s": 0.0013,
+    "Packet Length Variance": 0.0013,
+    "Average Packet Size": 0.0013,
+    "ACK Flag Count": 0.0013,
+    "byte_ratio": 0.0006,
+    "timing_entropy": 0.0006,
+    "Total Backward Packets": 0.0006,
+    "Fwd IAT Mean": 0.0006,
+    "Bwd IAT Mean": 0.0006,
+    "SYN Flag Count": 0.0006,
+    "FIN Flag Count": 0.0006,
+    "size_consistency": 0.0,
+    "flow_speed": 0.0,
+    "Flow Duration": 0.0,
+    "Total Fwd Packets": 0.0,
+    "Flow IAT Std": 0.0,
+    "connection_symmetry": -0.0006,
+    "Flow IAT Mean": -0.0006
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "model": "rule_based_baseline",
+  "f1_score": 0.747,
+  "precision": 0.6518,
+  "recall": 0.8748,
+  "confusion_matrix": [
+    [
+      3131,
+      1869
+    ],
+    [
+      501,
+      3499
+    ]
+  ]
+}
