@@ -6,3 +6,6 @@ data/raw/
 *.pcap
 mlruns/
 *.log
+.venv/
+*.csv
+*.zip
