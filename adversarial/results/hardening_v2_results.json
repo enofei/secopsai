@@ -1,0 +1,9 @@
+{
+  "round1_clean_f1": 0.9912,
+  "round1_clean_accuracy": 0.9922,
+  "round1_adversarial_examples": 1200,
+  "round2_clean_f1": 0.9906,
+  "round2_clean_accuracy": 0.9917,
+  "round2_adversarial_examples": 1200,
+  "total_training_size": 9600
+}

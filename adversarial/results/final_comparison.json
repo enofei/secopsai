@@ -1,0 +1,47 @@
+{
+  "requirement": "Survive at least 3 of 5 attacks (evasion rate < 50%)",
+  "attacks_survived_post_hardening_v2": 4,
+  "comparison": [
+    {
+      "attack": "Greedy Leaf-Flip Attack",
+      "evasion_rate_original": 1.0,
+      "evasion_rate_v2": 1.0,
+      "improvement": 0.0,
+      "survived": false,
+      "verdict": "FAIL"
+    },
+    {
+      "attack": "ZOO Attack",
+      "evasion_rate_original": 0.0,
+      "evasion_rate_v2": 0.0,
+      "improvement": 0,
+      "survived": true,
+      "verdict": "PASS"
+    },
+    {
+      "attack": "HopSkipJump Attack",
+      "evasion_rate_original": 1.0,
+      "evasion_rate_v2": 0.1304,
+      "improvement": 0.8696,
+      "survived": true,
+      "verdict": "PASS"
+    },
+    {
+      "attack": "Boundary Attack",
+      "evasion_rate_original": 1.0,
+      "evasion_rate_v2": 0.0761,
+      "improvement": 0.9239,
+      "survived": true,
+      "verdict": "PASS"
+    },
+    {
+      "attack": "Manual Feature Perturbation",
+      "evasion_rate_original": 0.0435,
+      "evasion_rate_v2": 0.0,
+      "improvement": 0.0435,
+      "survived": true,
+      "verdict": "PASS"
+    }
+  ],
+  "overall_verdict": "PASSED"
+}

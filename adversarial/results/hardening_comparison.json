@@ -1,0 +1,35 @@
+{
+  "attacks_survived_post_hardening": 2,
+  "comparison": [
+    {
+      "attack": "Greedy Leaf-Flip Attack",
+      "evasion_rate_before": 1.0,
+      "evasion_rate_after": 1.0,
+      "survived_post_hardening": false
+    },
+    {
+      "attack": "ZOO Attack",
+      "evasion_rate_before": 0.0,
+      "evasion_rate_after": 0.0,
+      "survived_post_hardening": true
+    },
+    {
+      "attack": "HopSkipJump Attack",
+      "evasion_rate_before": 1.0,
+      "evasion_rate_after": 1.0,
+      "survived_post_hardening": false
+    },
+    {
+      "attack": "Boundary Attack",
+      "evasion_rate_before": 1.0,
+      "evasion_rate_after": 1.0,
+      "survived_post_hardening": false
+    },
+    {
+      "attack": "Manual Feature Perturbation",
+      "evasion_rate_before": 0.0435,
+      "evasion_rate_after": 0.0217,
+      "survived_post_hardening": true
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "clean_f1_after_hardening": 0.9912,
+  "clean_accuracy_after_hardening": 0.9922,
+  "adversarial_examples_added": 300
+}
