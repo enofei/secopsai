@@ -22,7 +22,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas numpy scikit-learn xgboost \
+          pip install pandas numpy scikit-learn xgboost mlflow \
+                      adversarial-robustness-toolbox \
                       fastapi uvicorn python-jose passlib \
                       bcrypt python-multipart slowapi \
                       requests python-dotenv prometheus-client \
@@ -56,7 +57,25 @@ jobs:
           improvement = results.get("improvement_pct", 0)
           print(f"ML F1 Score: {f1}")
           print(f"Improvement over baseline: {improvement}%")
-          assert f1 >= 0.85, f"F1 score {f1} below minimum threshold 0.85"
+          assert f1 >= 0.85, f"F1 score {f1} below minimum 0.85"
           assert improvement >= 15, f"Improvement {improvement}% below 15% requirement"
           print("All regression checks passed")
           EOF
+
+      - name: Notify Slack on failure
+        if: failure()
+        run: |
+          curl -X POST ${{ secrets.SLACK_WEBHOOK_URL }} \
+            -H "Content-Type: application/json" \
+            -d '{
+              "text": "❌ SecOpsAI CI/CD Pipeline FAILED on commit ${{ github.sha }} by ${{ github.actor }}. Check: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }'
+
+      - name: Notify Slack on success
+        if: success()
+        run: |
+          curl -X POST ${{ secrets.SLACK_WEBHOOK_URL }} \
+            -H "Content-Type: application/json" \
+            -d '{
+              "text": "✅ SecOpsAI CI/CD Pipeline PASSED on commit ${{ github.sha }} by ${{ github.actor }}. All detection regression tests passed."
+            }'
