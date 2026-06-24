@@ -1,0 +1,96 @@
+{
+  "title": "SecOpsAI Detection Dashboard",
+  "uid": "secopsai-main",
+  "timezone": "browser",
+  "refresh": "10s",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total Detections",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+      "targets": [{
+        "expr": "sum(secopsai_detections_total)",
+        "legendFormat": "Total"
+      }]
+    },
+    {
+      "id": 2,
+      "title": "Attack Detections",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+      "targets": [{
+        "expr": "sum(secopsai_detections_total{prediction='ATTACK'})",
+        "legendFormat": "Attacks"
+      }]
+    },
+    {
+      "id": 3,
+      "title": "Total Alerts Fired",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+      "targets": [{
+        "expr": "sum(secopsai_alerts_total)",
+        "legendFormat": "Alerts"
+      }]
+    },
+    {
+      "id": 4,
+      "title": "Containment Actions",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+      "targets": [{
+        "expr": "sum(secopsai_containment_actions_total)",
+        "legendFormat": "Actions"
+      }]
+    },
+    {
+      "id": 5,
+      "title": "Detection Rate Over Time",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+      "targets": [
+        {
+          "expr": "rate(secopsai_detections_total{prediction='ATTACK'}[1m])",
+          "legendFormat": "Attacks/min"
+        },
+        {
+          "expr": "rate(secopsai_detections_total{prediction='BENIGN'}[1m])",
+          "legendFormat": "Benign/min"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "API Latency (p99)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+      "targets": [{
+        "expr": "histogram_quantile(0.99, rate(secopsai_inference_latency_ms_bucket[5m]))",
+        "legendFormat": "p99 latency (ms)"
+      }]
+    },
+    {
+      "id": 7,
+      "title": "Containment Actions Breakdown",
+      "type": "piechart",
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 12},
+      "targets": [{
+        "expr": "secopsai_containment_actions_total",
+        "legendFormat": "{{action_type}}"
+      }]
+    },
+    {
+      "id": 8,
+      "title": "Model Confidence Distribution",
+      "type": "histogram",
+      "gridPos": {"h": 8, "w": 16, "x": 8, "y": 12},
+      "targets": [{
+        "expr": "rate(secopsai_detection_confidence_bucket[5m])",
+        "legendFormat": "Confidence"
+      }]
+    }
+  ],
+  "schemaVersion": 38,
+  "version": 1
+}

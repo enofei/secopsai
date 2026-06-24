@@ -27,6 +27,10 @@ from typing import Optional
 
 from api.auth import authenticate_user, create_access_token, get_current_user
 from api.alert_pipeline import process_alert
+from api.metrics import (
+    detection_counter, latency_histogram, alert_counter,
+    confidence_histogram, containment_counter, get_metrics
+)
 
 
 # ── Logging setup ─────────────────────────────────────────────
@@ -111,6 +115,12 @@ class NetworkFlowFeatures(BaseModel):
 
 
 # ── Endpoints ──────────────────────────────────────────────────
+@app.get("/metrics")
+async def metrics():
+    """Prometheus metrics endpoint."""
+    return get_metrics()
+
+
 @app.get("/health")
 async def health_check():
     """Public health endpoint — no auth required."""
@@ -221,6 +231,25 @@ async def detect(
         result["alert"] = alert_info
 
     # Write audit log entry
+    # Record Prometheus metrics
+    detection_counter.labels(
+        prediction=result["prediction"],
+        model_version=result["model_version"]
+    ).inc()
+    latency_histogram.observe(result["latency_ms"])
+    confidence_histogram.observe(confidence)
+
+    if prediction == 1:
+        alert_counter.labels(
+            attack_type=result["prediction"],
+            severity="HIGH" if confidence >= 0.85 else "MEDIUM"
+        ).inc()
+        for action in (alert_info or {}).get("containment_actions", []):
+            if action.get("action") != "none":
+                containment_counter.labels(
+                    action_type=action.get("method", "unknown")
+                ).inc()
+
     write_audit_log({
         "timestamp":  result["timestamp"],
         "user":       current_user["username"],

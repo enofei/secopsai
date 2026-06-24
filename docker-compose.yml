@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+
+  secopsai-api:
+    build: .
+    container_name: secopsai-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - VIRUSTOTAL_API_KEY=${VIRUSTOTAL_API_KEY}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
+      - EMAIL_SENDER=${EMAIL_SENDER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_ANALYST=${EMAIL_ANALYST}
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: secopsai-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./dashboards/prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: secopsai-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secopsai123
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./dashboards/grafana:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  grafana-storage:
