@@ -215,7 +215,8 @@ async def detect(
         alert_info = process_alert(
             detection_result=result,
             source_ip=features.source_ip,
-            confidence=confidence
+            confidence=confidence,
+            raw_features=feature_dict
         )
         result["alert"] = alert_info
 
