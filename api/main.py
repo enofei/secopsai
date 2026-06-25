@@ -240,9 +240,17 @@ async def detect(
     confidence_histogram.observe(confidence)
 
     if prediction == 1:
+        if confidence >= 0.95:
+            sev = "CRITICAL"
+        elif confidence >= 0.85:
+            sev = "HIGH"
+        elif confidence >= 0.70:
+            sev = "MEDIUM"
+        else:
+            sev = "LOW"
         alert_counter.labels(
             attack_type=result["prediction"],
-            severity="HIGH" if confidence >= 0.85 else "MEDIUM"
+            severity=sev
         ).inc()
         for action in (alert_info or {}).get("containment_actions", []):
             if action.get("action") != "none":
