@@ -37,9 +37,10 @@ jobs:
         run: python models/baseline_rules.py
 
       - name: Train ML classifier
-        run: |
-          export MLFLOW_TRACKING_URI=sqlite:///mlflow.db
-          python models/ml_classifier.py
+        run: python models/ml_classifier.py
+        env:
+          MLFLOW_TRACKING_URI: sqlite:///mlflow.db
+          MLFLOW_ARTIFACT_ROOT: ./mlruns
 
       - name: Run API tests
         run: pytest tests/ -v --tb=short
@@ -61,7 +62,7 @@ jobs:
 
       - name: Notify Slack on success
         if: success()
-        run: curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" -H "Content-Type:application/json" -d "{\"text\":\"✅ SecOpsAI CI/CD PASSED on commit ${{ github.sha }} by ${{ github.actor }}. All detection regression tests passed.\"}"
+        run: curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" -H "Content-Type:application/json" -d "{\"text\":\"✅ SecOpsAI CI/CD PASSED on commit ${{ github.sha }} by ${{ github.actor }}. All regression tests passed.\"}"
 
       - name: Notify Slack on failure
         if: failure()

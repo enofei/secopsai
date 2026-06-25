@@ -192,7 +192,10 @@ def run_ml_classifier():
         print("\n[ML] Full Classification Report:")
         print(classification_report(y_test, y_pred, target_names=['BENIGN', 'ATTACK']))
 
-        mlflow.xgboost.log_model(model, "model")
+        try:
+            mlflow.xgboost.log_model(model, "model")
+        except Exception as e:
+            print(f"[ML] MLflow model artifact logging skipped: {e}")
 
     print("=" * 50)
     print("ML Training Complete")
