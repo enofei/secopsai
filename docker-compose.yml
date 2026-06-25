@@ -6,7 +6,7 @@ services:
     build: .
     container_name: secopsai-api
     ports:
-      - "8000:8000"
+      - "8080:8000"
     volumes:
       - .:/app
       - ./logs:/app/logs
