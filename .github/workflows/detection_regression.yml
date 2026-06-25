@@ -22,12 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas numpy scikit-learn xgboost mlflow \
-                      adversarial-robustness-toolbox \
-                      fastapi uvicorn python-jose passlib \
-                      bcrypt python-multipart slowapi \
-                      requests python-dotenv prometheus-client \
-                      pytest httpx
+          pip install pandas numpy scikit-learn xgboost mlflow fastapi uvicorn python-jose passlib bcrypt python-multipart slowapi requests python-dotenv prometheus-client pytest httpx
 
       - name: Generate synthetic dataset
         run: python data/generate_dataset.py
@@ -42,40 +37,32 @@ jobs:
         run: python models/baseline_rules.py
 
       - name: Train ML classifier
-        run: python models/ml_classifier.py
+        run: |
+          export MLFLOW_TRACKING_URI=sqlite:///mlflow.db
+          python models/ml_classifier.py
 
       - name: Run API tests
         run: pytest tests/ -v --tb=short
 
       - name: Verify F1 score requirement
         run: |
-          python3 << 'EOF'
+          python3 -c "
           import json
-          with open("models/results/ml_results.json") as f:
+          with open('models/results/ml_results.json') as f:
               results = json.load(f)
-          f1 = results["f1_score"]
-          improvement = results.get("improvement_pct", 0)
-          print(f"ML F1 Score: {f1}")
-          print(f"Improvement over baseline: {improvement}%")
-          assert f1 >= 0.85, f"F1 score {f1} below minimum 0.85"
-          assert improvement >= 15, f"Improvement {improvement}% below 15% requirement"
-          print("All regression checks passed")
-          EOF
-
-      - name: Notify Slack on failure
-        if: failure()
-        run: |
-          curl -X POST ${{ secrets.SLACK_WEBHOOK_URL }} \
-            -H "Content-Type: application/json" \
-            -d '{
-              "text": "❌ SecOpsAI CI/CD Pipeline FAILED on commit ${{ github.sha }} by ${{ github.actor }}. Check: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            }'
+          f1 = results['f1_score']
+          improvement = results.get('improvement_pct', 0)
+          print(f'ML F1 Score: {f1}')
+          print(f'Improvement over baseline: {improvement}%')
+          assert f1 >= 0.85, f'F1 score {f1} below minimum 0.85'
+          assert improvement >= 15, f'Improvement {improvement}% below 15% requirement'
+          print('All regression checks passed')
+          "
 
       - name: Notify Slack on success
         if: success()
-        run: |
-          curl -X POST ${{ secrets.SLACK_WEBHOOK_URL }} \
-            -H "Content-Type: application/json" \
-            -d '{
-              "text": "✅ SecOpsAI CI/CD Pipeline PASSED on commit ${{ github.sha }} by ${{ github.actor }}. All detection regression tests passed."
-            }'
+        run: curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" -H "Content-Type:application/json" -d "{\"text\":\"✅ SecOpsAI CI/CD PASSED on commit ${{ github.sha }} by ${{ github.actor }}. All detection regression tests passed.\"}"
+
+      - name: Notify Slack on failure
+        if: failure()
+        run: curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" -H "Content-Type:application/json" -d "{\"text\":\"❌ SecOpsAI CI/CD FAILED on commit ${{ github.sha }} by ${{ github.actor }}. Check Actions tab for details.\"}"
