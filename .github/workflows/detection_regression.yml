@@ -62,8 +62,38 @@ jobs:
 
       - name: Notify Slack on success
         if: success()
-        run: curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" -H "Content-Type:application/json" -d "{\"text\":\"✅ SecOpsAI CI/CD PASSED on commit ${{ github.sha }} by ${{ github.actor }}. All regression tests passed.\"}"
+        continue-on-error: true
+        env:
+          SLACK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -n "$SLACK_URL" ]; then
+            python3 -c "
+          import urllib.request, json, os
+          url = os.environ['SLACK_URL']
+          msg = json.dumps({'text': '✅ SecOpsAI CI/CD PASSED — all regression tests passed. Commit: ${{ github.sha }}'})
+          req = urllib.request.Request(url, msg.encode(), {'Content-Type': 'application/json'})
+          urllib.request.urlopen(req)
+          print('Slack notified')
+          "
+          else
+            echo "SLACK_WEBHOOK_URL secret not set — skipping notification"
+          fi
 
       - name: Notify Slack on failure
         if: failure()
-        run: curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" -H "Content-Type:application/json" -d "{\"text\":\"❌ SecOpsAI CI/CD FAILED on commit ${{ github.sha }} by ${{ github.actor }}. Check Actions tab for details.\"}"
+        continue-on-error: true
+        env:
+          SLACK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -n "$SLACK_URL" ]; then
+            python3 -c "
+          import urllib.request, json, os
+          url = os.environ['SLACK_URL']
+          msg = json.dumps({'text': '❌ SecOpsAI CI/CD FAILED — check Actions tab. Commit: ${{ github.sha }}'})
+          req = urllib.request.Request(url, msg.encode(), {'Content-Type': 'application/json'})
+          urllib.request.urlopen(req)
+          print('Slack notified')
+          "
+          else
+            echo "SLACK_WEBHOOK_URL secret not set — skipping notification"
+          fi
