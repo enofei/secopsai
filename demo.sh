@@ -63,7 +63,7 @@ echo "Step 4 — Injecting C2 BEACONING attack traffic..."
 curl -s -X POST http://localhost:8000/detect \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
-  -d @/tmp/test_detection.json | python3 -c "
+  -d @~/secopsai/tests/test_payload.json | python3 -c "
 import sys,json
 d=json.load(sys.stdin)
 print(f'  Prediction: {d[\"prediction\"]}')

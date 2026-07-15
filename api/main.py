@@ -149,7 +149,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 
 @app.post("/detect")
-@limiter.limit("60/minute")
+@limiter.limit("3/minute")
 async def detect(
     request: Request,
     features: NetworkFlowFeatures,
